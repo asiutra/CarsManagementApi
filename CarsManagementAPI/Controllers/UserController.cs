@@ -49,14 +49,23 @@ namespace CarsManagementAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(User user)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(user).State = EntityState.Modified;
+            var existingUser = _context.User.FirstOrDefault(c => c.Id == user.Id);
+
+            if (user.Id != existingUser.Id)
+                return BadRequest();
+
+            existingUser.Name = user.Name;
+            existingUser.Surname = user.Surname;
+            existingUser.Age = user.Age;
+            existingUser.Phone = user.Phone;
+            existingUser.Email = user.Email;
+            existingUser.City = user.City;
+            existingUser.PostCode = user.PostCode;
+            existingUser.Street = user.PostCode;
+            existingUser.ApartmentNumber = user.ApartmentNumber;
 
             try
             {
@@ -64,7 +73,7 @@ namespace CarsManagementAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!UserExists(user.Id))
                 {
                     return NotFound();
                 }
