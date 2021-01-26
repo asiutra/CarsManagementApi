@@ -100,7 +100,7 @@ namespace CarsManagementAPI.Controllers
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.User.FindAsync(id);
             if (user == null)
@@ -111,7 +111,7 @@ namespace CarsManagementAPI.Controllers
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return NoContent();
         }
 
         private bool UserExists(int id)
